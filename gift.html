@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issues for Robert· coleen/our-datingship</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }
+
+        .header {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 16px 32px;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .repo-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+
+        .repo-name span {
+            color: #8b949e;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 16px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            color: #8b949e;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #c9d1d9;
+            border-bottom-color: #f78166;
+        }
+
+        .counter {
+            background: #30363d;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 6px;
+        }
+
+        .issues-list {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .issue-item {
+            padding: 16px;
+            border-bottom: 1px solid #30363d;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            gap: 12px;
+        }
+
+        .issue-item:hover {
+            background: #161b22;
+        }
+
+        .issue-item:last-child {
+            border-bottom: none;
+        }
+
+        .issue-icon {
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .issue-content {
+            flex: 1;
+        }
+
+        .issue-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #c9d1d9;
+            margin-bottom: 4px;
+        }
+
+        .issue-title.closed {
+            opacity: 0.7;
+        }
+
+        .issue-meta {
+            font-size: 12px;
+            color: #8b949e;
+        }
+
+        .label {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .label-bug {
+            background: #da3633;
+            color: #fff;
+        }
+
+        .label-feature {
+            background: #1f6feb;
+            color: #fff;
+        }
+
+        .label-documentation {
+            background: #8957e5;
+            color: #fff;
+        }
+
+        .label-enhancement {
+            background: #a371f7;
+            color: #fff;
+        }
+
+        .label-critical {
+            background: #ff6b9d;
+            color: #fff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .priority {
+            margin-left: 8px;
+            font-size: 12px;
+            color: #f85149;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(1, 4, 9, 0.8);
+            z-index: 999;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            max-width: 900px;
+            width: 100%;
+            animation: slideDown 0.3s ease;
+            margin-bottom: 60px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #c9d1d9;
+            flex: 1;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #30363d;
+            color: #c9d1d9;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .issue-description {
+            color: #c9d1d9;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            white-space: pre-line;
+        }
+
+        .response-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .response-label {
+            font-weight: 600;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .response-input {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 12px;
+            color: #c9d1d9;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .response-input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .response-input::placeholder {
+            color: #6e7681;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #238636;
+            border-color: #2ea043;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #2ea043;
+        }
+
+        .btn-secondary {
+            background: #21262d;
+            border-color: #30363d;
+            color: #c9d1d9;
+        }
+
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feedback.success {
+            background: #238636;
+            border: 1px solid #2ea043;
+            color: #fff;
+        }
+
+        .feedback.error {
+            background: #da3633;
+            border: 1px solid #f85149;
+            color: #fff;
+        }
+
+        .closed-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #8250df;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .state-open {
+            color: #3fb950;
+        }
+
+        .state-closed {
+            color: #a371f7;
+        }
+
+        .final-message {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .final-message h1 {
+            font-size: 32px;
+            color: #ff6b9d;
+            margin-bottom: 24px;
+        }
+
+        .final-message p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #c9d1d9;
+            margin-bottom: 12px;
+        }
+
+        .heart-animation {
+            font-size: 48px;
+            margin: 24px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(1.1); }
+            20%, 40% { transform: scale(1); }
+        }
+
+        .locked-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #6e7681;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .repo-name {
+                font-size: 16px;
+            }
+
+            .modal-content {
+                margin: 20px 0;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+
+            .final-message h1 {
+                font-size: 24px;
+            }
+
+            .final-message p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="repo-name">
+                <span>coleen</span> / our-datingship
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="tabs">
+                <a href="#" class="tab active">
+                    Issues for Robert <span class="counter" id="issue-counter">7</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="issues-container" class="issues-list">
+            <!-- Issues will be populated here -->
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div style="flex: 1;">
+                    <div class="modal-title" id="modal-title"></div>
+                    <div style="margin-top: 8px; color: #8b949e; font-size: 14px;" id="modal-meta"></div>
+                </div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const issues = [
+            {
+                id: 1,
+                title: "Bug: Overthinks literally everything",
+                description: `**Describe the bug:**
+He'll spiral about things like:
+- "Are you the right person for me?"
+- "Is sleeping over too soon?"
+- "Should we travel together yet?"
+- "You should get tested" (fair point tbh)
+
+**Expected behavior:**
+Sometimes things can just happen naturally.
+
+**Actual behavior:**
+Full risk analysis on every decision.
+
+**Analysis:**
+I get it. You're careful and you think of everything.
+But we are ok and figuring it out together.
+
+**Priority:** Medium (because your overthinking comes from a good place)`,
+                label: "bug",
+                priority: "medium",
+                responses: {
+                    keywords: ["sorry", "okay", "youre right", "you're right", "ill try", "i'll try", "chill", "relax", "fair", "got it", "understood", "I will do better", "my bad"],
+                    correct: "✓ Acknowledged. Your overthinking is a bit much but also kind of cute. Closing this knowing you'll probably reopen it in your head later anyway.",
+                    wrong: [
+                        "That's not taking responsibility. Try again.",
+                        "Weak response. I need more enthusiasm.",
+                        "Come on, you can do better than that.",
+                        "Not convincing. Try harder."
+                    ]
+                },
+                closed: false
+            },
+            {
+                id: 2,
+                title: "Feature Request: Keep showing up like you do",
+                description: `**Feature description:**
+You pick me up from the airport.
+You show up when I need you, listen, open up.
+And so many things... it doesn't go unnoticed.
+
+**Why this matters:**
+These aren't small things.
+
+**Implementation:**
+Just... keep being you.
+
+**Priority:** High`,
+                label: "feature",
+                priority: "high",
+                responses: {
+                    keywords: ["any"],
+                    correct: "✓ Feature approved. You're good at this. Don't change.",
+                    wrong: []
+                },
+                closed: false,
+                autoPass: true
+            },
+            {
+                id: 3,
+                title: "Bug: Makes me listen to the untz untz😁",
+                description: `**Describe the bug:**
+"Just watch this set"
+"This drop is insane"
+"Ooh chills. Chicken skin."
+
+**Steps to reproduce:**
+1. Open YouTube
+2. Find some Swedish House Mafia festival set
+3. Listen intensely
+
+**Expected behavior:**
+I'd probably just watch and forget about it.
+
+**Actual behavior:**
+I remember it because watching him get excited is one of my favorite things.
+
+**Status:** Won't Fix
+**Reason:** I like watching you get excited about things. Keep showing me what you love.`,
+                label: "bug",
+                priority: "low",
+                responses: {
+                    keywords: ["any"],
+                    correct: "✓ Closed as Won't Fix. Keep showing me your world.",
+                    wrong: []
+                },
+                closed: false,
+                autoPass: true
+            },
+            {
+                id: 4,
+                title: "Bug: Way too good at kissing",
+                description: `**Describe the bug:**
+His kissing should come with a warning label.
+
+**Steps to reproduce:**
+1. We start making out
+2. Time ignored
+3. "It's been 3 hours"
+
+**Expected behavior:**
+Normal people kiss for a reasonable amount of time (allegedly).
+
+**Actual behavior:**
+We're basically fused together and I'm not mad about it.
+
+**Additional notes:**
+For someone I "tainted", you got too good VERY quick 😈.
+
+**Resolution required:**
+Acknowledge your skills and promise to keep it up.`,
+                label: "bug",
+                priority: "critical",
+                responses: {
+                    keywords: ["good", "I am good", "keep", "continue", "will", "promise", "skilled", "better", "best", "amazing", "great", "doing this", "I won't stop", "wont stop"],
+                    correct: "✓ Issue acknowledged. This will never actually be resolved. This is permanent now. Keep doing exactly what you're doing.",
+                    wrong: [
+                        "That's not acknowledging anything. Try again.",
+                        "I need you to admit you're good at this.",
+                        "Come on, where's the confidence?",
+                        "Wrong answer. Be more confident about your skills."
+                    ]
+                },
+                closed: false
+            },
+            {
+                id: 5,
+                title: "Documentation: When I knew I liked you",
+                description: `**Context:**
+You wanted to know the real me.
+Not just the fun parts.
+
+**The moment:**
+When I understood you want to learn about my inner world.
+And I can be as messy or "broken" and that's ok.
+When you were patient with me figuring things out.
+
+**Observation:**
+You're more understanding of my flaws than I expected anyone to be.
+
+**Status:** Documented for the record.`,
+                label: "documentation",
+                priority: "high",
+                responses: {
+                    keywords: ["any"],
+                    correct: "✓ Saved forever.",
+                    wrong: []
+                },
+                closed: false,
+                autoPass: true
+            },
+            {
+                id: 6,
+                title: "Bug: I tainted you (you're welcome)",
+                description: `**Current status:**
+I am your first 🥹
+(Totally not a big deal for me at all hehe) 
+
+**Bug report:**
+You're now thoroughly corrupted 😈.
+
+**Side effects:**
+- Knowing what you like
+- More confidence
+- Unlimited access to 🍒🍆
+
+**Expected response:**
+Say you are glad it was me.
+
+**Note:**
+This isn't really an issue, just me being smug 😏.`,
+                label: "bug",
+                priority: "medium",
+                responses: {
+                    keywords: ["glad it was you", "glad you", "happy it was you", "thank", "thanks", "grateful", "appreciate", "lucky", "glad", "accept", "fate", "yours"],
+                    correct: "✓ Permanently deployed. No rollback available. You're welcome.",
+                    wrong: [
+                        "Not what I asked. Say you're glad it was me.",
+                        "Come on, just say it",
+                        "Wrong. Tell me you're glad it was me.",
+                        "Try again. 'Glad it was you' - say it."
+                    ]
+                },
+                closed: false
+            },
+            {
+                id: 7,
+                title: "Enhancement: I learned to code for this",
+                description: `**What I did:**
+Learned to code. Well, kinda.
+Spent days on this hehe.
+
+**Why:**
+Because apparently I care about you or something.
+
+**Current status:**
+- You're reading this
+- It actually works inshallah
+- I built a whole fake GitHub issue tracker
+
+**Required action:**
+Admit you're impressed (even just a little bit 🥲).
+
+**Priority:** High (seriously, are you impressed or what?)`,
+                label: "enhancement",
+                priority: "high",
+                responses: {
+                    keywords: ["impressed", "amazing", "wow", "incredible", "cool", "awesome", "great", "love it", "this is great", "so good"],
+                    correct: "✓ Good answer. I worked hard on this. Glad you appreciate it.",
+                    wrong: [
+                        "That's not enthusiastic enough. Try again.",
+                        "I need more excitement here.",
+                        "Come on, I spent DAYS on this.",
+                        "Wrong answer. Be more impressed."
+                    ]
+                },
+                closed: false
+            },
+            {
+                id: 8,
+                title: "CRITICAL: Final issue",
+                description: `**Severity:** CRITICAL
+**Priority:** HIGHEST
+**Status:** OPEN (forever - for now haha)
+
+You made it through all the issues!
+
+I see you're serious about debugging our "problems".
+
+I'm taking time to learn you.
+Also learning how to communicate and show my affection.
+Please be patient with me.
+
+I built this maybe not-so-impressive issue tracker to say all that. And also,
+
+I love you (believe me lol)
+
+Happy Valentine's Day.
+
+— Coleen ❤️`,
+                label: "critical",
+                priority: "critical",
+                responses: {
+                    keywords: ["any"],
+                    correct: "FINAL_MESSAGE",
+                    wrong: []
+                },
+                closed: false,
+                locked: true,
+                unlockAfter: 7
+            }
+        ];
+
+        let closedIssues = 0;
+
+        function renderIssues() {
+            const container = document.getElementById('issues-container');
+            const openIssues = issues.filter(i => !i.closed && (!i.locked || closedIssues >= (i.unlockAfter || 0)));
+            const closedIssuesList = issues.filter(i => i.closed);
+
+            let html = '';
+
+            openIssues.forEach(issue => {
+                const priorityText = issue.priority === 'critical' ? '🚨 CRITICAL' : 
+                                    issue.priority === 'high' ? '⚠️ High' : 
+                                    issue.priority === 'medium' ? 'Medium' : 'Low';
+                
+                html += `
+                    <div class="issue-item" onclick="openIssue(${issue.id})">
+                        <div class="issue-icon state-open">●</div>
+                        <div class="issue-content">
+                            <div class="issue-title">
+                                ${issue.title}
+                                <span class="label label-${issue.label}">${issue.label}</span>
+                                ${issue.locked ? '<span class="locked-badge">🔒 Locked</span>' : ''}
+                            </div>
+                            <div class="issue-meta">
+                                #${issue.id} opened by coleen
+                                <span class="priority">${priorityText}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            closedIssuesList.forEach(issue => {
+                html += `
+                    <div class="issue-item" onclick="openIssue(${issue.id})">
+                        <div class="issue-icon state-closed">✓</div>
+                        <div class="issue-content">
+                            <div class="issue-title closed">
+                                ${issue.title}
+                                <span class="closed-badge">Closed</span>
+                            </div>
+                            <div class="issue-meta">
+                                #${issue.id} by coleen
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('issue-counter').textContent = openIssues.length;
+        }
+
+        function openIssue(id) {
+            const issue = issues.find(i => i.id === id);
+            if (!issue) return;
+
+            if (issue.locked && closedIssues < (issue.unlockAfter || 0)) {
+                return;
+            }
+
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMeta = document.getElementById('modal-meta');
+            const modalBody = document.getElementById('modal-body');
+
+            modalTitle.textContent = issue.title;
+            
+            let statusBadge = '';
+            if (issue.closed) {
+                statusBadge = '<span class="closed-badge">✓ Closed</span>';
+            }
+            
+            modalMeta.innerHTML = `
+                <span class="label label-${issue.label}">${issue.label}</span>
+                ${issue.priority === 'critical' ? '<span class="priority">🚨 CRITICAL</span>' : ''}
+                ${statusBadge}
+            `;
+
+            let bodyHtml = `<div class="issue-description">${issue.description}</div>`;
+
+            if (!issue.closed) {
+                if (!issue.autoPass) {
+                    bodyHtml += `
+                        <div class="response-section">
+                            <div class="response-label">💬 Your response:</div>
+                            <textarea 
+                                class="response-input" 
+                                id="response-input" 
+                                placeholder="Type your response..."
+                            ></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="submitResponse(${id})">
+                                Close issue
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeModal()">
+                                Cancel
+                            </button>
+                        </div>
+                        <div id="feedback"></div>
+                    `;
+                } else {
+                    bodyHtml += `
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="closeIssue(${id})">
+                                Close issue
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeModal()">
+                                Back
+                            </button>
+                        </div>
+                    `;
+                }
+            } else {
+                bodyHtml += `
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="closeModal()">
+                            Back
+                        </button>
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = bodyHtml;
+            modal.classList.add('active');
+
+            if (!issue.closed && !issue.autoPass) {
+                setTimeout(() => document.getElementById('response-input')?.focus(), 100);
+            }
+        }
+
+        function submitResponse(id) {
+            const issue = issues.find(i => i.id === id);
+            const responseInput = document.getElementById('response-input');
+            const response = responseInput?.value.trim().toLowerCase() || '';
+            const feedback = document.getElementById('feedback');
+
+            if (!response) {
+                feedback.className = 'feedback error';
+                feedback.textContent = '⚠️ Write something.';
+                return;
+            }
+
+            if (id === 8) {
+                showFinalMessage();
+                return;
+            }
+
+            const hasKeyword = issue.responses.keywords.some(kw => 
+                response.includes(kw.toLowerCase())
+            );
+
+            if (hasKeyword) {
+                feedback.className = 'feedback success';
+                feedback.textContent = issue.responses.correct;
+                setTimeout(() => {
+                    closeIssue(id);
+                }, 2000);
+            } else {
+                const wrongResponses = issue.responses.wrong;
+                const randomWrong = wrongResponses[Math.floor(Math.random() * wrongResponses.length)];
+                feedback.className = 'feedback error';
+                feedback.textContent = randomWrong;
+            }
+        }
+
+        function closeIssue(id) {
+            const issue = issues.find(i => i.id === id);
+            issue.closed = true;
+            closedIssues++;
+            
+            closeModal();
+            renderIssues();
+
+            const finalIssue = issues.find(i => i.id === 8);
+            if (finalIssue && finalIssue.locked && closedIssues >= finalIssue.unlockAfter) {
+                finalIssue.locked = false;
+                setTimeout(() => {
+                    renderIssues();
+                    showUnlockNotification();
+                }, 500);
+            }
+        }
+
+        function showUnlockNotification() {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #238636;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 6px;
+                font-weight: 500;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+                z-index: 1000;
+                max-width: 90%;
+                text-align: center;
+            `;
+            notification.textContent = '🔓 Final issue unlocked';
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function showFinalMessage() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="final-message">
+                    <div class="heart-animation">💕</div>
+                    <h1>Happy Valentine's Day!</h1>
+                    <p style="margin-top: 32px; color: #8b949e; font-size: 14px;">
+                        — Coleen ❤️
+                    </p>
+                </div>
+            `;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        renderIssues();
+    </script>
+</body>
+</html>
+</html>
