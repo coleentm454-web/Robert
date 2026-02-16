@@ -755,11 +755,21 @@ Happy Valentine's Day.
         ];
 
         let closedIssues = 0;
+        // Load closed issues from localStorage
+        const closedIssueIds = JSON.parse(localStorage.getItem('closedIssues') || '[]');
         const savedResponses = JSON.parse(localStorage.getItem('issueResponses') || '{}');
         function saveResponse(issueId, response) {
             savedResponses[issueId] = response;
             localStorage.setItem('issueResponses', JSON.stringify(savedResponses));
         }
+        // Mark issues as closed based on localStorage
+        closedIssueIds.forEach(id => {
+            const issue = issues.find(i => i.id === id);
+            if (issue) {
+                issue.closed = true;
+                closedIssues++;
+            }
+        });
         function renderIssues() {
             const container = document.getElementById('issues-container');
             const openIssues = issues.filter(i => !i.closed && (!i.locked || closedIssues >= (i.unlockAfter || 0)));
@@ -938,7 +948,11 @@ Happy Valentine's Day.
             const issue = issues.find(i => i.id === id);
             issue.closed = true;
             closedIssues++;
-            
+            // Save closed issue to localStorage
+            if (!closedIssueIds.includes(id)) {
+                closedIssueIds.push(id);
+                localStorage.setItem('closedIssues', JSON.stringify(closedIssueIds));
+            }
             closeModal();
             renderIssues();
 
