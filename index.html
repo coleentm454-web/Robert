@@ -755,7 +755,11 @@ Happy Valentine's Day.
         ];
 
         let closedIssues = 0;
-
+        const savedResponses = JSON.parse(localStorage.getItem('issueResponses') || '{}');
+        function saveResponse(issueId, response) {
+            savedResponses[issueId] = response;
+            localStorage.setItem('issueResponses', JSON.stringify(savedResponses));
+        }
         function renderIssues() {
             const container = document.getElementById('issues-container');
             const openIssues = issues.filter(i => !i.closed && (!i.locked || closedIssues >= (i.unlockAfter || 0)));
@@ -834,7 +838,15 @@ Happy Valentine's Day.
             `;
 
             let bodyHtml = `<div class="issue-description">${issue.description}</div>`;
-
+            // Show saved response for closed issues
+            if (issue.closed && savedResponses[id]) {
+                bodyHtml += `
+                    <div class="saved-response">
+                        <div class="saved-response-label">Your response:</div>
+                        <div class="saved-response-text">${savedResponses[id]}</div>
+                    </div>
+                `;
+            }
             if (!issue.closed) {
                 if (!issue.autoPass) {
                     bodyHtml += `
@@ -910,6 +922,7 @@ Happy Valentine's Day.
             if (hasKeyword) {
                 feedback.className = 'feedback success';
                 feedback.textContent = issue.responses.correct;
+                saveResponse(id, responseInput.value);
                 setTimeout(() => {
                     closeIssue(id);
                 }, 2000);
