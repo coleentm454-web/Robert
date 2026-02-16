@@ -852,7 +852,7 @@ Type anything you want. This issue will stay open...`,
 
             let bodyHtml = `<div class="issue-description">${issue.description}</div>`;
             // Show saved response for closed issues
-            if (issue.closed && savedResponses[id]) {
+            if ((issue.closed || id === 8) && savedResponses[id]) {
                 bodyHtml += `
                     <div class="saved-response">
                         <div class="saved-response-label">Your response:</div>
