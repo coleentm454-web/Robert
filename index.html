@@ -740,11 +740,14 @@ I love you (believe me lol)
 
 Happy Valentine's Day.
 
-— Coleen ❤️`,
+— Coleen ❤️
+
+**Your response:**
+Type anything you want. This issue will stay open...`,
                 label: "critical",
                 priority: "critical",
                 responses: {
-                    keywords: ["any"],
+                    keywords: [""],
                     correct: "FINAL_MESSAGE",
                     wrong: []
                 },
@@ -921,11 +924,20 @@ Happy Valentine's Day.
             }
 
             if (id === 8) {
-                saveResponse(id, responseInput.value);
-                showFinalMessage();
+                if (response) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = '✓ Response saved. This issue will remain open.';
+                    saveResponse(id, responseInput.value);
+                    setTimeout(() => {
+                        showFinalMessage();
+                    }, 2000);
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = '⚠️ Write something.';
+                }
                 return;
             }
-
+            
             const hasKeyword = issue.responses.keywords.some(kw => 
                 response.includes(kw.toLowerCase())
             );
